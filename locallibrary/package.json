@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "devstart": "SET DEBUG=* & nodemon ./bin/www"
+    "devstart": "SET DEBUG=* & nodemon ./bin/www",
+    "route-test": "SET DEBUG=locallibrary:* & npm run devstart"
   },
   "dependencies": {
+    "async": "^2.4.0",
     "body-parser": "~1.17.1",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.3",

@@ -1,4 +1,9 @@
 var express = require('express');
-var wiki = require('wiki.js');
+var app = express();
 
+var wiki = require('./wiki.js');
+app.use('/wiki', wiki);
 
+app.listen(3000, () => {
+  console.log('App is listening on port 3000');
+});
