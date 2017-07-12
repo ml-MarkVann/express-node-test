@@ -1,13 +1,53 @@
 var Author = require('../models/author');
+var Book = require('../models/book');
+
+var moment = require('moment');
+var async = require('async');
 
 // Display list of all Authors
 exports.author_list = function(req, res) {
-    res.send('NOT IMPLEMENTED: Author list');
+  Author.find()
+    .sort([['family_name', 'ascending']])
+    .exec(function (err, list_authors) {
+      if (err) { return next(err); }
+      //Successful, so render
+      list_birth_formatted = list_authors.map(e => (
+        e.date_of_birth ? moment(e.date_of_birth).format('YYYY/MM/DD') : ''
+      ), this);
+      list_death_formatted = list_authors.map(e => (
+        e.date_of_death ? moment(e.date_of_death).format('YYYY/MM/DD') : ''
+      ), this);
+      res.render('author_list', {
+        title: 'Author List',
+        author_list: list_authors,
+        birth_list: list_birth_formatted,
+        death_list: list_death_formatted,
+      });
+    });
 };
 
 // Display detail page for a specific Author
 exports.author_detail = function(req, res) {
-    res.send('NOT IMPLEMENTED: Author detail: ' + req.params.id);
+  async.parallel({
+    author: function(callback) {     
+      Author.findById(req.params.id)
+        .exec(callback);
+    },
+    authors_books: function(callback) {
+      Book.find({ 'author': req.params.id },'title summary')
+        .exec(callback);
+    },
+  }, function(err, results) {
+    if (err) { return next(err); }
+    //Successful, so render
+    res.render('author_detail', {
+      title: 'Author Detail',
+      author: results.author,
+      author_birth: moment(results.author.date_of_birth).format('YYYY/MM/DD'),
+      author_death: moment(results.author.date_of_death).format('YYYY/MM/DD'),
+      author_books: results.authors_books
+    });
+  });
 };
 
 // Display Author create form on GET
