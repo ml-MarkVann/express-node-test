@@ -26,6 +26,20 @@ AuthorSchema
   return '/catalog/author/' + this._id;
 });
 
+// Virtual for author's date_of_birth_input
+AuthorSchema
+.virtual('date_of_birth_input')
+.get(function () {
+  return this.date_of_birth ? moment(this.date_of_birth).format('YYYY-MM-DD') : '';
+});
+
+// Virtual for author's date_of_death_input
+AuthorSchema
+.virtual('date_of_death_input')
+.get(function () {
+  return this.date_of_death ? moment(this.date_of_death).format('YYYY-MM-DD') : '';
+});
+
 // Virtual for author's lifespan
 AuthorSchema
 .virtual('lifespan')
