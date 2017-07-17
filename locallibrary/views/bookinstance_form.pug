@@ -5,7 +5,7 @@ block content
 
   form(method='POST' action='')
     div.form-group
-      label(for='book') Book: #{bookinstance.book.toString()}
+      label(for='book') Book:
       select#book.form-control(type='select' placeholder='Select book' name='book' required='true')
         for book in book_list
           if bookinstance
@@ -23,11 +23,11 @@ block content
     div.form-group
       label(for='status') Status:
       select#status.form-control(type='select' placeholder='Select status' name='status' required='true')
-        -var status = bookinstance.status
+        -var status = bookinstance ? bookinstance.status : '';
+        option(value='Reserved' selected=(status=='Reserved'?'selected':false)) Reserved
         option(value='Maintenance' selected=(status=='Maintenance'?'selected':false)) Maintenance
         option(value='Available' selected=(status=='Available'?'selected':false)) Available
         option(value='Loaned' selected=(status=='Loaned'?'selected':false)) Loaned
-        option(value='Reserved' selected=(status=='Reserved'?'selected':false)) Reserved
 
     button.btn.btn-primary(type='submit') Submit
 
